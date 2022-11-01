@@ -73,7 +73,7 @@ public class TCPClient extends JFrame implements ActionListener, KeyListener {
             //获取socket通道的输出流
             bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             //当line不为空，将line的内容拼接到文本域中，每拼接一行就换行
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 jta.append(line + System.lineSeparator());
             }
