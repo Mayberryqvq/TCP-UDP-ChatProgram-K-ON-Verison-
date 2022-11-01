@@ -30,6 +30,15 @@ public class TCPServer extends JFrame implements ActionListener, KeyListener {
 
     //无参构造方法
     //播放音乐
+    /**
+         * 因为Runnable()是函数式接口，所以可以使用Lambda表达式此处用了匿名内部类 + Lambda表达式的写法，完整写法应该如下：
+         * Runnable runnable = () -> {
+         *     while (true) {
+         *                 playMusic();
+         *             }
+         * }
+         * new Thread(runnable).start;
+         * */
     public TCPServer() {
         new Thread(() -> {
             while (true) {
@@ -101,7 +110,7 @@ public class TCPServer extends JFrame implements ActionListener, KeyListener {
             //获取socket通道的输出流（服务器端自己输出的）
             bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             //当line不为空，将line的内容拼接到文本域中，每拼接一行就换行
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 jta.append(line + System.lineSeparator());
             }
