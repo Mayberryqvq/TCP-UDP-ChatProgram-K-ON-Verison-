@@ -31,6 +31,15 @@ public class UDPServer extends JFrame implements Runnable, ActionListener, KeyLi
 
     //无参构造方法
     //播放音乐
+    /**
+         * 因为Runnable()是函数式接口，所以可以使用Lambda表达式此处用了匿名内部类 + Lambda表达式的写法，完整写法应该如下：
+         * Runnable runnable = () -> {
+         *     while (true) {
+         *                 playMusic();
+         *             }
+         * }
+         * new Thread(runnable).start;
+         * */
     public UDPServer() {
         new Thread(() -> {
             while (true) {
