@@ -153,9 +153,7 @@ public class TCPServer extends JFrame implements ActionListener, KeyListener {
             sdl = (SourceDataLine) AudioSystem.getLine(info);
             sdl.open(aif);
             sdl.start();
-            FloatControl fc = (FloatControl) sdl.getControl(FloatControl.Type.MASTER_GAIN);
             int nByte = 0;
-            int writeByte = 0;
             final int SIZE = 1024 * 64;
             byte[] buffer = new byte[SIZE];
             while (nByte != -1) {// 判断 播放/暂停 状态
