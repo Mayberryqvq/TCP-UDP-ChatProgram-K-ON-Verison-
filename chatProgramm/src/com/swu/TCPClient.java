@@ -95,7 +95,7 @@ public class TCPClient extends JFrame implements ActionListener, KeyListener {
         //获取文本框中发送内容
         String text = jtf.getText();
         //拼接内容
-        text = "TCPClient: " + text;
+        text = currentTime() + "  TCPClient: " + text;
         //在自己的文本域中显示
         jta.append(text + System.lineSeparator());
         jtf.setText(" ");
@@ -110,7 +110,12 @@ public class TCPClient extends JFrame implements ActionListener, KeyListener {
             E.printStackTrace();
         }
     }
-
+    
+    //获取当前时间
+    private String currentTime() {
+        return new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss").format(new Date());
+    }
+    
     @Override
     public void keyPressed(KeyEvent e) {
         //如果点击的按键是回车键
