@@ -114,7 +114,7 @@ public class UDPServer extends JFrame implements Runnable, ActionListener, KeyLi
         //获取文本框中发送内容
         String text = jtf.getText();
         //拼接内容
-        text = "UDPServer: " + text;
+        text = currentTime() + "  UDPServer: " + text;
         //在自己的文本域中显示
         jta.append(text + System.lineSeparator());
         jtf.setText(" ");
@@ -128,6 +128,11 @@ public class UDPServer extends JFrame implements Runnable, ActionListener, KeyLi
         } catch (Exception E) {
             E.printStackTrace();
         }
+    }
+    
+    //获取当前时间
+    private String currentTime() {
+        return new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss").format(new Date());
     }
 
     private void playMusic() {
