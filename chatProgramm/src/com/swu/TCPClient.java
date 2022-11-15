@@ -1,4 +1,4 @@
-package com.swu;
+package com.swu.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,25 +8,38 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.*;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class TCPClient extends JFrame implements ActionListener, KeyListener {
+
+public class TCPClient1 extends JFrame implements ActionListener, KeyListener {
     public static void main(String[] args) {
-        TCPClient client = new TCPClient();
+        TCPClient1 client = new TCPClient1();
     }
 
     //私有化属性
-    private JTextArea jta;
     private JScrollPane jsp;
     private JPanel jp;
     private JTextField jtf;
     private JButton jb;
-    private BufferedWriter bw = null;
     private ImageIcon image;
     private JLabel jl;
     private JPanel topPanel;
+    private static final String SERVER_IP = "127.0.0.1";
+    private static final int SERVER_PORT = 2333;
+    private int flag = 0;
+    private String name;
+    //公有静态属性
+    public static  BufferedReader br = null;
+    public static String line;
+    public static BufferedWriter bw = null;
+    public static JTextArea jta;
+    public static Socket client;
+
+
 
     //无参构造方法
-    public TCPClient() {
+    public TCPClient1() {
         //设置背景
         image = new ImageIcon("/Users/zengjuehua/Desktop/002.jpg");
         jl = new JLabel(image);
@@ -67,20 +80,18 @@ public class TCPClient extends JFrame implements ActionListener, KeyListener {
         jtf.addKeyListener(this);
         try {
             //创建Socket对象（并尝试连接到服务器端）
-            Socket socket = new Socket("127.0.0.1", 2333);
-            //获取socket通道的输入流
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //获取socket通道的输出流
+            Socket socket = new Socket(SERVER_IP, SERVER_PORT);
+            client = socket;
             bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            //当line不为空，将line的内容拼接到文本域中，每拼接一行就换行
-            String line;
+            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            jta.append("You have successfully connected to server..." + System.lineSeparator());
             while ((line = br.readLine()) != null) {
-                jta.append(line + System.lineSeparator());
+                if (flag <= 1) {
+                    jta.append(line + System.lineSeparator());
+                } else {
+                    jta.append(currentTime() + "  TCPServer：" + line + System.lineSeparator());
+                }
             }
-            //关闭socket通道
-            socket.close();
-            br.close();
-            bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,13 +102,17 @@ public class TCPClient extends JFrame implements ActionListener, KeyListener {
         sendDataToSocket();
     }
 
+    //发送信息
     private void sendDataToSocket() {
         //获取文本框中发送内容
         String text = jtf.getText();
-        //拼接内容
-        text = currentTime() + "  TCPClient: " + text;
         //在自己的文本域中显示
-        jta.append(text + System.lineSeparator());
+        if (flag == 0) {
+            name = text;
+            jta.append(text + System.lineSeparator());
+        } else {
+            jta.append(currentTime() + "  " + name + ": " + text + System.lineSeparator());
+        }
         jtf.setText(" ");
         try {
             //发送文本
@@ -106,16 +121,17 @@ public class TCPClient extends JFrame implements ActionListener, KeyListener {
             bw.flush();
             //清空文本框内容
             jtf.setText(" ");
+            flag++;
         } catch (Exception E) {
             E.printStackTrace();
         }
     }
-    
+
     //获取当前时间
     private String currentTime() {
         return new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss").format(new Date());
     }
-    
+
     @Override
     public void keyPressed(KeyEvent e) {
         //如果点击的按键是回车键
